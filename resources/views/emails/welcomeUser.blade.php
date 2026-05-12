@@ -39,7 +39,7 @@
 
         <p>
             <strong>Password:</strong>
-            {{ $passwordUnHashed }}
+            {{ $password }}
         </p>
 
         <hr>

@@ -25,11 +25,10 @@ class StoreEmployeeRequest extends FormRequest
         return [
             'name' => ['required','string','min:2','max:255'],
             'email' => ['required','email','unique:users,email'],
-            'password' => ['required','min:6','confirmed'],
+            // 'password' => ['required','min:6','confirmed'],
             'phone' => ['nullable','string'],
-            // 'position' => ['nullable','string'],
+            'position' => ['nullable','string'],
             'department_id' => ['nullable', 'exists:departments,id'],
-            'department' => ['nullable','string'],
             'base_salary' => ['required','numeric','min:0'],
             'hire_date' => ['nullable','date'],
             'address' => ['nullable','string'],

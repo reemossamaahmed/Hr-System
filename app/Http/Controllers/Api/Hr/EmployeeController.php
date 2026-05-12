@@ -8,18 +8,20 @@ use App\Mail\WelcomeMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class EmployeeController extends Controller
 {
     public function store(StoreEmployeeRequest $request)
     {
 
-        $passwordUnHashed = $request->password;
+        $password = Str::random(8);
+        // $passwordUnHashed = $request->password;
         // dd($passwordUnHashed);
         $employee = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => $password,
             'phone' => $request->phone,
             'role' => 'employee',
             'position' => $request->position,
@@ -31,7 +33,7 @@ class EmployeeController extends Controller
             'national_id' => $request->national_id,
         ]);
 
-        Mail::to($employee->email)->send(new WelcomeMail($employee, $passwordUnHashed));
+        Mail::to($employee->email)->send(new WelcomeMail($employee, $password));
 
         return response()->json([
             'message' => 'Employee created successfully',

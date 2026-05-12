@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Http\Controllers\Api\Hr;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreEmployeeRequest;
+use App\Mail\WelcomeMail;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+
+class EmployeeController extends Controller
+{
+    public function store(StoreEmployeeRequest $request)
+    {
+        $employee = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+            'phone' => $request->phone,
+            'role' => 'employee',
+            'position' => $request->position,
+            // 'department' => $request->department,
+            'base_salary' => $request->base_salary,
+            'hire_date' => $request->hire_date,
+            'status' => 'active',
+            'address' => $request->address,
+            'national_id' => $request->national_id,
+        ]);
+        Mail::to($employee->email)->send(new WelcomeMail($employee));
+
+        return response()->json([
+            'message' => 'Employee created successfully',
+            'employee' => $employee,
+        ], 201);
+    }
+}

@@ -13,6 +13,9 @@ class EmployeeController extends Controller
 {
     public function store(StoreEmployeeRequest $request)
     {
+
+        $passwordUnHashed = $request->password;
+        // dd($passwordUnHashed);
         $employee = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -20,14 +23,15 @@ class EmployeeController extends Controller
             'phone' => $request->phone,
             'role' => 'employee',
             'position' => $request->position,
-            // 'department' => $request->department,
+            'department_id' => $request->department_id,
             'base_salary' => $request->base_salary,
             'hire_date' => $request->hire_date,
             'status' => 'active',
             'address' => $request->address,
             'national_id' => $request->national_id,
         ]);
-        Mail::to($employee->email)->send(new WelcomeMail($employee));
+
+        Mail::to($employee->email)->send(new WelcomeMail($employee, $passwordUnHashed));
 
         return response()->json([
             'message' => 'Employee created successfully',

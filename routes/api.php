@@ -42,5 +42,16 @@ Route::middleware(['auth:sanctum','role:employee'])->prefix('employee')->group(f
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::post('/forgot-password', [AuthController::class, 'sendOtp']);
-Route::post('/verify-otp', [AuthController::class, 'verifyOtpAndReset']);
+
+// Route::post('/forgot-password', [AuthController::class, 'sendOtp']);
+// Route::post('/verify-otp', [AuthController::class, 'verifyOtpAndReset']);
+
+
+Route::prefix('auth')->group(function () {
+
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+
+    Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+});

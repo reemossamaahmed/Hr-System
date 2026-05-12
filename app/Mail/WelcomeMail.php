@@ -18,9 +18,11 @@ class WelcomeMail extends Mailable
      * Create a new message instance.
      */
     public $employee;
-    public function __construct($employee)
+    public $passwordUnHashed;
+    public function __construct($employee, $passwordUnHashed)
     {
         $this->employee = $employee;
+        $this->passwordUnHashed = $passwordUnHashed;    
     }
 
     /**

@@ -14,6 +14,10 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -22,13 +26,35 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $token = $user->createToken('auth-token',[$user->role])->plainTextToken;
+
+        // 👇 device fingerprint
+        $device = $request->header('User-Agent');
+
+        // 👇 امسح توكن نفس الجهاز
+        $user->tokens()
+            ->where('name', $device)
+            ->delete();
+
+        // 👇 اعمل token جديد مرتبط بالجهاز
+        $token = $user->createToken(
+            $device,
+            [$user->role]
+        )->plainTextToken;
+
+        // $token = $user->createToken('auth-token',[$user->role])->plainTextToken;
+
+        // return response()->json([
+        //     'message' => 'Logged in successfully',
+        //     'user' => $user,
+        //     'token' => $token,
+        // ]);
 
         return response()->json([
             'message' => 'Logged in successfully',
-            'user' => $user,
-            'token' => $token,
-        ]);
+            'user' => $user
+        ])->cookie('token',$token,60 * 24 * 7,'/',null,false, // true in production HTTPS
+            true,false,'Lax' //'Strict'
+            );
     }
 
     public function logout(Request $request)
@@ -39,7 +65,7 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Logged out successfully'
-        ]);
+        ])->withoutCookie('token');
     }
 
     public function me(Request $request)

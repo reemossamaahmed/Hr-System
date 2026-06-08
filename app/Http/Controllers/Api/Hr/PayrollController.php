@@ -17,9 +17,29 @@ class PayrollController extends Controller
             'month' => 'required|date',
         ]);
 
+
         $user = User::find($request->user_id);
 
+        if (!$user->hasRole('Employee')) {
+            return response()->json([
+                'message' => 'Payroll can only be generated for employees'
+            ], 400);
+        }
+
+
+        $exists = Payroll::where('user_id', $request->user_id)
+        ->where('month', $request->month)
+        ->exists();
+
+        if ($exists) {
+            return response()->json([
+                'message' => 'Payroll already generated'
+            ], 409);
+        }
+
+
         $attendances = Attendance::where('user_id', $user->id)
+            ->whereYear('date', date('Y', strtotime($request->month)))
             ->whereMonth('date', date('m', strtotime($request->month)))
             ->get();
 

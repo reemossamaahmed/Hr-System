@@ -18,7 +18,7 @@ return new class extends Migration
             // $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone')->nullable();
-            $table->enum('role', ['hr', 'employee']);
+            // $table->enum('role', ['hr', 'employee']);
             $table->string('position')->nullable();
             $table->foreignId('department_id')->nullable()->constrained('departments')->nullOnDelete();
             $table->decimal('base_salary', 10, 2)->default(0);

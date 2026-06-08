@@ -9,13 +9,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email|exists:users,email',
             'password' => 'required'
         ]);
         $user = User::where('email', $request->email)->first();
@@ -38,7 +39,8 @@ class AuthController extends Controller
         // 👇 اعمل token جديد مرتبط بالجهاز
         $token = $user->createToken(
             $device,
-            [$user->role]
+            // [$user->role]
+            $user->getRoleNames()->toArray()
         )->plainTextToken;
 
         // $token = $user->createToken('auth-token',[$user->role])->plainTextToken;
@@ -147,6 +149,10 @@ class AuthController extends Controller
             ], 400);
         }
 
+        $otpRecord->update([
+            'verified_at' => now()
+        ]);
+
 
         return response()->json([
             'message' => 'OTP verified successfully'
@@ -159,7 +165,12 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'otp' => 'required|digits:6',
-            'password' => 'required|min:6|confirmed'
+            // 'password' => 'required|min:6|confirmed'
+            'password' => [
+                'required',
+                'confirmed',
+                Password::min(6)->letters()->numbers()
+            ]
         ]);
 
         $otpRecord = PasswordOtp::where('email', $request->email)
@@ -180,9 +191,11 @@ class AuthController extends Controller
             ], 400);
         }
 
-
-
-
+        if (!$otpRecord->verified_at) {
+            return response()->json([
+                'message' => 'OTP must be verified first'
+            ], 400);
+        }
 
         // update password
         $employee = User::where('email', $request->email)->first();
@@ -195,10 +208,6 @@ class AuthController extends Controller
         // mark OTP as used
         $otpRecord->used = true;
         $otpRecord->save();
-
-
-
-
 
         return response()->json([
             'message' => 'Password reset successfully'

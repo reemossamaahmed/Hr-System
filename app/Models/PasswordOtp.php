@@ -11,8 +11,9 @@ class PasswordOtp extends Model
     protected $fillable = [
         'email',
         'otp',
-        // 'expires_at',
-        // 'used',
+        'expires_at',
+        'used',
+        'verified_at',
     ];
 
     protected $casts = [

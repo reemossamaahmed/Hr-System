@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('deduction', 10, 2)->default(0);
             $table->decimal('net_salary', 10, 2);
             $table->timestamps();
+            $table->unique(['user_id', 'month']);
         });
     }
 

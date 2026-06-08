@@ -16,14 +16,12 @@ class EmployeeController extends Controller
     {
 
         $password = Str::random(8);
-        // $passwordUnHashed = $request->password;
-        // dd($passwordUnHashed);
+
         $employee = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => $password,
             'phone' => $request->phone,
-            'role' => 'employee',
             'position' => $request->position,
             'department_id' => $request->department_id,
             'base_salary' => $request->base_salary,
@@ -32,6 +30,8 @@ class EmployeeController extends Controller
             'address' => $request->address,
             'national_id' => $request->national_id,
         ]);
+        
+        $employee->assignRole('Employee');
 
         Mail::to($employee->email)->send(new WelcomeMail($employee, $password));
 

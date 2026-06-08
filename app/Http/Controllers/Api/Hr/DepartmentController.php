@@ -27,11 +27,18 @@ class DepartmentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $department = Department::findOrFail($id);
 
-        $department->update($request->all());
+        $department = Department::find($id);
+        if (!$department) {
+            return response()->json(['message' => 'Department not found'], 404);
+        }
 
-        return response()->json($department);
+
+        $department->update($request->only(['name','description']));
+
+        return response()->json([
+            'department' => $department->fresh()
+        ]);
     }
 
     public function destroy($id)

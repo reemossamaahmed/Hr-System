@@ -8,7 +8,9 @@ class Department extends Model
 {
     protected $fillable = [
         'name',
+        'code',
         'description',
+        'status'
     ];
 
     public function users()

@@ -26,13 +26,14 @@ class StoreEmployeeRequest extends FormRequest
             'name' => ['required','string','min:2','max:255'],
             'email' => ['required','email','unique:users,email'],
             // 'password' => ['required','min:6','confirmed'],
-            'phone' => ['nullable','string'],
-            'position' => ['nullable','string'],
-            'department_id' => ['nullable', 'exists:departments,id'],
+            'phone' => ['nullable','string','max:20'],
+            'position' => ['nullable','string','max:255'],
+            'department_id' => ['required','numeric','exists:departments,id'],
             'base_salary' => ['required','numeric','min:0'],
             'hire_date' => ['nullable','date'],
             'address' => ['nullable','string'],
-            'national_id' => ['nullable','unique:users,national_id'],
+            'national_id' => ['nullable','string','unique:users,national_id'],
+            'profile_image' => ['nullable','image','mimes:jpg,jpeg,png','max:2048'],
         ];
     }
 }

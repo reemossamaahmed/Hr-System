@@ -26,20 +26,68 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
-
-
 Route::middleware(['auth:sanctum','role:HR'])->prefix('hr')->group(function () {
 
-    Route::get('/attendances', [HrAttendanceController::class, 'index']);
+    Route::prefix('/employees')->group(function(){
+        // Create employee
+        Route::post('/', [EmployeeController::class, 'store']);
 
-    Route::post('/employees',[EmployeeController::class, 'store']);
+        // Get all employees
+        Route::get('/', [EmployeeController::class, 'index']);
 
+        // Get single employee
+        Route::get('/{employeeId}', [EmployeeController::class, 'show']);
+
+        // Update employee
+        Route::put('/{employeeId}', [EmployeeController::class, 'update']);
+
+        // Delete employee
+        Route::delete('/{employeeId}', [EmployeeController::class, 'destroy']);
+    });
+
+    // Departments
+    Route::prefix('/departments')->group(function () {
+
+        Route::post('/', [DepartmentController::class, 'store']);
+
+        Route::get('/', [DepartmentController::class, 'index']);
+
+        Route::get('/{departmentId}', [DepartmentController::class, 'show']);
+
+        Route::put('/{departmentId}', [DepartmentController::class, 'update']);
+
+        Route::delete('/{departmentId}', [DepartmentController::class, 'destroy']);
+
+    });
 
     // Payroll
     Route::post('/payroll/generate', [PayrollController::class, 'generate']);
 
-    Route::apiResource('departments', DepartmentController::class);
+    // Get all attendances
+    Route::get('/attendances', [HrAttendanceController::class, 'index']);
+
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 Route::middleware(['auth:sanctum','role:Employee'])->prefix('employee')->controller(AttendanceController::class)->group(function () {

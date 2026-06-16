@@ -39,7 +39,7 @@ class User extends Authenticatable
         return [
             'hire_date' => 'date',
             'base_salary' => 'decimal:2',
-            'password' => 'hashed',
+            // 'password' => 'hashed',
             // 'email_verified_at' => 'datetime'
         ];
     }

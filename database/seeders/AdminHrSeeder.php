@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class AdminHrSeeder extends Seeder
 {
@@ -15,7 +16,8 @@ class AdminHrSeeder extends Seeder
             ],
             [
                 'name' => 'Admin HR',
-                'password' => '12345678',
+                // 'password' => '12345678',
+                'password' => Hash::make('12345678'),
                 'phone' => '0500000000',
                 'position' => 'HR Manager',
                 'base_salary' => 10000,

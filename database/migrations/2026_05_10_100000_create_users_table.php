@@ -23,16 +23,13 @@ return new class extends Migration
             $table->foreignId('department_id')->nullable()->constrained('departments')->nullOnDelete();
             $table->decimal('base_salary', 10, 2)->default(0);
             $table->date('hire_date')->nullable();
-            $table->enum('status', [
-                'active',
-                'inactive',
-                'suspended'
-            ])->default('active');
+            $table->enum('status', ['active','inactive'])->default('active');
             $table->string('address')->nullable();
             $table->string('national_id')->nullable()->unique();
             $table->string('profile_image')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
 
 

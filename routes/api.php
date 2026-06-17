@@ -1,8 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\Employee\AttendanceController;
-use App\Http\Controllers\Api\Hr\HrAttendanceController;
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\Hr\PayrollController;
 use App\Http\Controllers\Api\Hr\DepartmentController;
 use App\Http\Controllers\Api\Hr\EmployeeController;
@@ -60,34 +59,15 @@ Route::middleware(['auth:sanctum','role:HR'])->prefix('hr')->group(function () {
 
     });
 
+
+
     // Payroll
     Route::post('/payroll/generate', [PayrollController::class, 'generate']);
 
-    // Get all attendances
-    Route::get('/attendances', [HrAttendanceController::class, 'index']);
+    // Attendance Report all Employees
+    Route::get('/attendance/report', [AttendanceController::class, 'report']);
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 Route::middleware(['auth:sanctum','role:Employee'])->prefix('employee')->controller(AttendanceController::class)->group(function () {

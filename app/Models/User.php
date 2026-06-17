@@ -7,20 +7,19 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens, HasRoles;
+    use HasFactory, Notifiable, HasApiTokens, HasRoles, SoftDeletes;
 
     protected $fillable = [
         'name',
         'email',
         'password',
         'phone',
-        // 'role',
         'position',
         'department_id',
-        // 'department',
         'base_salary',
         'hire_date',
         'status',
@@ -44,42 +43,7 @@ class User extends Authenticatable
         ];
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Helpers
-    |--------------------------------------------------------------------------
-    */
 
-    // public function isHr(): bool
-    // {
-    //     return $this->role === 'hr';
-    // }
-
-    // public function isEmployee(): bool
-    // {
-    //     return $this->role === 'employee';
-    // }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Scopes
-    |--------------------------------------------------------------------------
-    */
-
-    // public function scopeHr($query)
-    // {
-    //     return $query->where('role', 'hr');
-    // }
-
-    // public function scopeEmployee($query)
-    // {
-    //     return $query->where('role', 'employee');
-    // }
-
-    // public function scopeActive($query)
-    // {
-    //     return $query->where('status', 'active');
-    // }
 
     public function department()
     {

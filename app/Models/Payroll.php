@@ -7,18 +7,32 @@ use Illuminate\Database\Eloquent\Model;
 class Payroll extends Model
 {
     protected $fillable = [
+
         'user_id',
+
         'month',
+
+        'year',
+
         'base_salary',
-        'total_late_minutes',
-        'deduction',
+
+        'overtime_amount',
+
+        'late_deduction',
+
+        'absence_deduction',
+
         'net_salary',
+
+        'status',
+
+        'paid_at'
+
     ];
 
     protected function casts(): array
     {
         return [
-            'month' => 'date',
             'base_salary' => 'decimal:2',
             'deduction' => 'decimal:2',
             'net_salary' => 'decimal:2',
